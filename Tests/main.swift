@@ -1,0 +1,23 @@
+import Foundation
+let clock = MatchClock()
+assert(clock.remaining == [180,180] && clock.active == nil)
+clock.press(1)
+assert(clock.active == 1)
+clock.press(0)
+assert(clock.active == 1 && clock.moves == [0,0])
+clock.pause()
+assert(clock.active == nil)
+let paused = clock.remaining
+clock.update()
+assert(clock.remaining == paused)
+clock.resume()
+assert(clock.active == 1)
+clock.press(1)
+assert(clock.active == 0 && clock.moves == [0,1])
+clock.reset()
+assert(clock.remaining == [180,180] && clock.moves == [0,0] && !clock.started)
+clock.remaining = [0,180]
+clock.update()
+clock.press(1)
+assert(clock.expired == 0 && clock.active == nil)
+print("PASS: initial state, turn ownership, paused time, resume side, handoff, reset, expiration")
