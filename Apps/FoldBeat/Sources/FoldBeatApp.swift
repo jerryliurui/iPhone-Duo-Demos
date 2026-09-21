@@ -16,7 +16,7 @@ import AVFoundation
             let format=AVAudioFormat(standardFormatWithSampleRate:44100, channels:1)!
             for kind in 0..<5 {
                 let player=AVAudioPlayerNode(); engine.attach(player)
-                engine.connect(player,to:engine.mainMixerNode,format:format); players.append(player)
+                try engine.connectNode(player,to:engine.mainMixerNode,format:format); players.append(player)
                 let frames=AVAudioFrameCount(44100 * 0.24)
                 let buffer=AVAudioPCMBuffer(pcmFormat:format,frameCapacity:frames)!
                 buffer.frameLength=frames

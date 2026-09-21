@@ -7,10 +7,15 @@ import Observation
     var moves = [0, 0]
     var started = false
     private var pausedSide = 0
-    private var stamp = ProcessInfo.processInfo.systemUptime
+    private let uptime: () -> Double
+    private var stamp: Double
+    init(uptime: @escaping () -> Double = { ProcessInfo.processInfo.systemUptime }) {
+        self.uptime = uptime
+        self.stamp = uptime()
+    }
     var expired: Int? { remaining.firstIndex(where: { $0 <= 0 }) }
     func update() {
-        let now = ProcessInfo.processInfo.systemUptime
+        let now = uptime()
         if let active { remaining[active] = max(0, remaining[active] - (now - stamp)) }
         stamp = now
         if expired != nil { active = nil }

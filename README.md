@@ -1,6 +1,8 @@
 # iPhone Duo 小 Demo 合集
 
-四个独立的 SwiftUI 小 App，用可操作的场景观察 iPhone Duo 的布局变化。每个 Demo 只关注一组交互，可以单独打开、编译和修改，无需账号、服务器或第三方依赖。
+四个独立的 SwiftUI 小 App，用可操作的场景观察 iPhone Duo 的布局变化。
+
+**当前为早期开发版本：四个工程已通过模拟器构建，三款新 App 的完整界面与音频验证尚未完成。** 验证范围见 [记录](Docs/VALIDATION.md)。每个 Demo 只关注一组交互，可以单独打开、编译和修改，无需账号、服务器或第三方依赖。
 
 | App | 可以玩什么 | 关注的适配点 |
 |---|---|---|
@@ -64,3 +66,5 @@ swiftc Apps/DuelClock/Sources/MatchClock.swift Tests/main.swift \
 MIT License。代码、原创演示内容和程序合成音色可在遵守许可证的前提下复用。系统图标、系统软件及 Apple 名称归其权利人所有；本项目不是 Apple 官方项目。
 
 公开版本不包含个人业务 App、笔记原始素材、账号数据、证书、密钥、个人邮箱或工作目录。提交使用项目通用身份。
+
+维护者可执行 `python3 scripts/check_public_tree.py` 检查已跟踪文件及可达历史中的常见敏感信息。该脚本是辅助检查，不替代人工审阅。
