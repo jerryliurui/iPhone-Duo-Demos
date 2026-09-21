@@ -68,12 +68,12 @@ struct BeatView: View {
                 Menu { Toggle("启用适配",isOn:$adapted) } label: { Image(systemName:"slider.horizontal.3").frame(width:44,height:44) }.accessibilityLabel("布局设置")
             }
             if adapted {
-                ArrangementView { display } secondary: { pads }.arrangementViewStyle(.split)
+                ArrangementView { display.padding(12) } secondary: { pads.padding(12) }.arrangementViewStyle(.split)
             } else { VStack(spacing:12) { display; pads } }
             HStack {
                 Text("BPM").font(.caption.bold()).foregroundStyle(mint)
                 Text("\(Int(bpm))").monospacedDigit().font(.headline)
-                Slider(value:$bpm,in:60...160,step:1).accessibilityLabel("速度")
+                Slider(value:$bpm,in:60...160,step:1).accessibilityLabel("速度").accessibilityValue("\(Int(bpm)) 拍每分钟")
                 Button { running.toggle(); nextBeat=0; step = -1 } label: {
                     Image(systemName:running ? "stop.fill" : "play.fill").frame(width:48,height:48).background(mint,in:Circle()).foregroundStyle(.black)
                 }.accessibilityLabel(running ? "停止节拍" : "开始节拍")
@@ -90,7 +90,7 @@ struct BeatView: View {
             HStack { Text("POCKET SESSION").font(.caption.weight(.semibold)).tracking(2); Spacer(); Text("\(hits) 次敲击").font(.caption.monospacedDigit()) }.foregroundStyle(mint)
             Spacer(minLength:0)
             HStack(alignment:.firstTextBaseline,spacing:8) {
-                Text(String(format:"%02d",running ? step+1 : 1)).font(.system(size:96,weight:.light,design:.rounded)).monospacedDigit()
+                Text(String(format:"%02d",running ? step+1 : 1)).font(.system(size:80,weight:.light,design:.rounded)).monospacedDigit()
                 Text("/ 04").font(.title2).foregroundStyle(.white.opacity(0.5))
                 Spacer()
                 Image(systemName:"waveform.path").font(.system(size:58,weight:.ultraLight)).foregroundStyle(mint).accessibilityHidden(true)
@@ -101,17 +101,20 @@ struct BeatView: View {
         }.padding(24).frame(maxWidth:.infinity,maxHeight:.infinity).background(.white.opacity(0.045),in:RoundedRectangle(cornerRadius:28))
     }
     private var pads: some View {
+        GeometryReader { space in
         LazyVGrid(columns:[GridItem(.flexible()),GridItem(.flexible())],spacing:12) {
             ForEach(0..<4) { i in
                 Button { audio.hit(i); hits += 1; last=["底鼓 · KICK","军鼓 · SNARE","踩镲 · HAT","通鼓 · TOM"][i] } label: {
-                    VStack(alignment:.leading,spacing:12) {
+                    VStack(alignment:.leading,spacing:6) {
                         HStack { Text(String(format:"%02d",i+1)).font(.caption.monospaced()); Spacer(); Image(systemName:["circle.inset.filled","line.3.horizontal","sparkle","circle.dotted"][i]) }
-                        Spacer(minLength:8)
+                        Spacer(minLength:0)
                         Text(["KICK","SNARE","HAT","TOM"][i]).font(.title3.weight(.bold))
                         Text(["底鼓","军鼓","踩镲","通鼓"][i]).font(.caption)
-                    }.padding(20).frame(maxWidth:.infinity,minHeight:100).background(i == 0 ? mint : .white.opacity(0.10),in:RoundedRectangle(cornerRadius:24)).foregroundStyle(i == 0 ? .black : .white)
+                    }.padding(14).frame(maxWidth:.infinity).frame(height:max(96,(space.size.height-12)/2)).background(i == 0 ? mint : .white.opacity(0.10),in:RoundedRectangle(cornerRadius:24)).foregroundStyle(i == 0 ? .black : .white)
                 }.buttonStyle(.plain)
             }
         }.frame(maxWidth:.infinity,maxHeight:.infinity)
+        }
     }
 }
+

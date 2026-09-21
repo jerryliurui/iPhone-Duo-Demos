@@ -19,7 +19,7 @@ struct PaletteView: View {
                 Menu { Toggle("启用适配",isOn:$adapted) } label: { Image(systemName:"slider.horizontal.3").frame(width:44,height:44) }.accessibilityLabel("布局设置")
             }
             if adapted {
-                ArrangementView { canvas } secondary: { controls }.arrangementViewStyle(.split)
+                ArrangementView { canvas.padding(12) } secondary: { controls.padding(12) }.arrangementViewStyle(.split)
             } else { ZStack(alignment:.bottom) { canvas; controls.frame(maxHeight:220).padding(12) } }
             HStack { Text("随手画一点，颜色慢慢选。"); Spacer(); Text("\(strokes.count) 笔").monospacedDigit() }.font(.caption).foregroundStyle(ink.opacity(0.7))
         }.padding(16).background(Color(red:0.94,green:0.92,blue:0.88)).foregroundStyle(ink).tint(ink).preferredColorScheme(.light)
@@ -73,3 +73,4 @@ struct PaletteView: View {
         }.background(Color(red:0.98,green:0.97,blue:0.94),in:RoundedRectangle(cornerRadius:28))
     }
 }
+

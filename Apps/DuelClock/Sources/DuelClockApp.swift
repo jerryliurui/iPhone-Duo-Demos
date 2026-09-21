@@ -26,7 +26,7 @@ struct ClockView: View {
                 .accessibilityLabel("布局设置")
             }
             if adapted {
-                ArrangementView { player(0) } secondary: { player(1) }
+                ArrangementView { player(0).padding(12) } secondary: { player(1).padding(12) }
                     .arrangementViewStyle(.split)
             } else {
                 VStack(spacing:12) { player(0); player(1) }
@@ -77,3 +77,4 @@ struct ClockView: View {
         return clock.active == side ? "你的回合 · 轻触交棒" : clock.active == nil ? "已暂停" : "等待对方"
     }
 }
+
