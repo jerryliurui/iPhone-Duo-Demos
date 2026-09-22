@@ -6,6 +6,8 @@ struct RegionLabView: View {
     @State private var showOcclusion = false
     @State private var rtl = false
     @State private var hinge: DeviceHinge?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     var body: some View {
         NavigationStack {
             GeometryReader { proxy in
@@ -18,6 +20,18 @@ struct RegionLabView: View {
                             .font(.title2.bold()).foregroundStyle(Palette.ink)
                         Text("边框直接来自当前视图的系统查询结果；没有返回区域时，不画替代框。")
                             .font(.subheadline).foregroundStyle(.secondary)
+                        // Everything a layout can actually read about the current posture, in one place.
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("环境识别").font(.headline)
+                            Text("内容区 \(Int(proxy.size.width)) × \(Int(proxy.size.height)) pt · \(proxy.size.width > proxy.size.height ? "横向" : "纵向")")
+                            Text("sizeClass  横 \(className(horizontalSizeClass))  ·  竖 \(className(verticalSizeClass))")
+                            Text("hinge  \(hinge.map { "\(statusName($0))  \(Int($0.angle.degrees.rounded()))°" } ?? "无数据")")
+                            Text("division  active \(proxy.reservedRegions(kind: .division).count)  ·  含 inactive \(proxy.reservedRegions(kind: .division, options: .includeInactive).count)")
+                        }
+                        .font(.system(.subheadline, design: .monospaced).weight(.semibold))
+                        .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Palette.teal.opacity(0.12), in: RoundedRectangle(cornerRadius: 16))
+                        .accessibilityElement(children: .combine)
                         Picker("区域类型", selection: $showOcclusion) {
                             Text("division").tag(false)
                             Text("occlusion").tag(true)
@@ -72,6 +86,14 @@ struct RegionLabView: View {
         let progress = min(max(degrees / 180, 0), 1)
         let response = sin(progress * .pi)
         return 120 * response * response
+    }
+
+    private func className(_ sizeClass: UserInterfaceSizeClass?) -> String {
+        switch sizeClass {
+        case .compact: return "compact"
+        case .regular: return "regular"
+        default: return "unknown"
+        }
     }
 
     private func statusName(_ hinge: DeviceHinge) -> String {
